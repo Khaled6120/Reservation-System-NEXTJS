@@ -1,5 +1,4 @@
 import React from 'react'
-import Header from './components/Header'
 import RestaurantNavBar from './components/RestaurantNavBar'
 import Rating from './components/Rating'
 import Title from './components/Title'
