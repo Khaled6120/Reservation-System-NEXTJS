@@ -40,7 +40,8 @@ const fetchRestaurantByCity = (searchParams: SearchParams) => {
         cuisine: true,
         price: true,
         slug: true,
-        location: true
+        location: true,
+        reviews: true
     }
 
 
