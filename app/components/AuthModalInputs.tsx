@@ -1,4 +1,3 @@
-import React from 'react'
 
 
 interface Props {
@@ -14,6 +13,10 @@ interface Props {
   isSignin: boolean;
 }
 function AuthModalInputs({ inputs, handleChangeInput, isSignin }: Props) {
+ 
+
+ 
+ 
   return (
     <div>
       {isSignin && <div className="my-3 flex justify-between text-sm">

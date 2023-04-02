@@ -1,10 +1,11 @@
 "use client"
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import AuthModalInputs from './AuthModalInputs';
+import useAuth from '../../hooks/useAuth';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -21,7 +22,7 @@ export default function LoginModal({ isSignin }: { isSignin: boolean }) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
+    const { signin } = useAuth()
     const renderContent = (signinContent: string, signupContent: string) => {
         return isSignin ? signinContent : signupContent;
     }
@@ -40,16 +41,38 @@ export default function LoginModal({ isSignin }: { isSignin: boolean }) {
         phone: "",
         city: "",
         password: "",
+    })
+
+    const [disabled, setDisabled] = useState(true);
+    useEffect(() => {
+
+        if (isSignin) {
+            if (inputs.password && inputs.email && inputs.firstName && inputs.lastName && inputs.phone && inputs.city) {
+                return setDisabled(false)
+            }
+        } else {
+            if (inputs.password || inputs.email) {
+                return setDisabled(false)
+            }
+        }
+        setDisabled(true)
+
+    }, [inputs])
+
+
+    const handleClick = () => {
+        if (!isSignin) {
+            signin({ email: inputs.email, password: inputs.password })
+        }
     }
 
-    )
     return (
         <div>
             <button
                 className={`${renderContent("bg-blue-400 text-white", "")} border p-1 px-4 rounded mr-3`}
                 onClick={handleOpen}
             >
-                {renderContent("Sign in", "Sign up")}
+                {renderContent( "Sign up","Sign in")}
             </button>
             <Modal
                 open={open}
@@ -67,8 +90,8 @@ export default function LoginModal({ isSignin }: { isSignin: boolean }) {
                                 {renderContent("Log Into Your Account", "Create Your OpenTable Account")}
                             </h2>
                             <AuthModalInputs inputs={inputs} handleChangeInput={handleChangeInput} isSignin={isSignin} />
-                            <button className='uppercase bg-red-600 w-full text-white rounded text-sm p-3 mb-10 disabled:bg-gray-300'>
-                                {renderContent("Sign In", "Create Account")}
+                            <button onClick={handleClick} className='uppercase bg-red-600 w-full text-white rounded text-sm p-3 mb-10 disabled:bg-gray-300' disabled={disabled}>
+                                {renderContent( "Create Account","Sign In")}
                             </button>
                         </div>
                     </div>
